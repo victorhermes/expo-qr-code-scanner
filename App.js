@@ -1,12 +1,28 @@
+
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Button } from "react-native";
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import * as firebase from 'firebase';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBfYFw1eSQsoEMp2c0s8lFdKgWKt7SiVEs",
+  authDomain: "arduino-johnny.firebaseapp.com",
+  databaseURL: "https://arduino-johnny.firebaseio.com",
+  projectId: "arduino-johnny",
+  storageBucket: "arduino-johnny.appspot.com",
+  messagingSenderId: "284015856655",
+  appId: "1:284015856655:web:c67c7236adc2ebc054677a",
+};
+
+firebase.initializeApp(firebaseConfig);
 
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState(false);
+
+  const referencia = firebase.database().ref('LED');
 
   useEffect(() => {
     (async () => {
@@ -17,8 +33,11 @@ export default function App() {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    setText(!text);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    referencia.on('value', (snapshot) => {
+      const asd = snapshot.val()
+      alert(asd);
+    });
+
   };
 
   if (hasPermission === null) {
