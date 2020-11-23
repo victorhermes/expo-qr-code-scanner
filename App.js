@@ -52,10 +52,6 @@ export default function App() {
     } else {
       alert("Erro ao abrir porta")
     }
-
-
-
-
   };
 
   if (hasPermission === null) {
