@@ -1,8 +1,7 @@
-
+import * as firebase from 'firebase';
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Button } from "react-native";
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import * as firebase from 'firebase';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBfYFw1eSQsoEMp2c0s8lFdKgWKt7SiVEs",
@@ -31,12 +30,31 @@ export default function App() {
     })();
   }, []);
 
+  const updateDoorValue = (type) => {
+    referencia.set(type)
+  }
+
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    referencia.on('value', (snapshot) => {
-      const asd = snapshot.val()
-      alert(asd);
-    });
+
+    const qrCodeHash = 'Victor';
+
+    if (qrCodeHash === data) {
+      referencia.once("value", function (snapshot) {
+        var doorStatus = snapshot.val();
+
+        if (doorStatus === false) {
+          updateDoorValue(true)
+        } else {
+          updateDoorValue(false)
+        }
+      });
+    } else {
+      alert("Erro ao abrir porta")
+    }
+
+
+
 
   };
 
