@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Button } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 const firebaseConfig = {
@@ -19,9 +19,9 @@ firebase.initializeApp(firebaseConfig);
 export default function App() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [text, setText] = useState(false);
 
-  const referencia = firebase.database().ref('LED');
+  const referencia = firebase.database().ref('doorStatus');
+  const qrCodeHash = '62f803e86b0c95955205e952ee7c1570';
 
   useEffect(() => {
     (async () => {
@@ -36,8 +36,6 @@ export default function App() {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-
-    const qrCodeHash = 'Victor';
 
     if (qrCodeHash === data) {
       referencia.once("value", function (snapshot) {
